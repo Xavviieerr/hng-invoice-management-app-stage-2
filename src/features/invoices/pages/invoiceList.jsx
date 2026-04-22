@@ -2,8 +2,11 @@ import { useState } from "react";
 import StatusFilter from "../components/statusFilter";
 import InvoiceItem from "../components/invoiceItem";
 import noInvoiceImage from "../../../assets/images/noInvoiceImage.png";
+import NewInvoiceForm from "../components/NewInvoiceForm";
 
 export default function InvoiceList() {
+	const [show, setShow] = useState(false);
+
 	const [filters, setFilters] = useState({
 		draft: false,
 		pending: false,
@@ -98,6 +101,7 @@ export default function InvoiceList() {
 
 	return (
 		<div className=" h-screen  flex items-center flex-col gap-15">
+			{show && <NewInvoiceForm setShow={setShow} show={show} />}
 			{/* invoices top bar */}
 			<div
 				className="mt-[77px] mx-auto w-full max-w-[730px] h-[55px] 
@@ -122,6 +126,7 @@ export default function InvoiceList() {
 
 					{/* button */}
 					<button
+						onClick={() => setShow(true)}
 						className="flex items-center gap-3 bg-purple-primary hover:bg-purple-light
 					 text-white px-3 py-3 rounded-full shadow transition"
 					>
