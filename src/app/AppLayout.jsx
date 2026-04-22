@@ -1,3 +1,4 @@
+import React from "react";
 import { useTheme } from "../context/themeContext";
 import LightDarkButton from "../shared/invoice/LightDarkButton";
 import Logo from "../assets/images/logo.png";
@@ -8,9 +9,9 @@ export default function AppLayout({ children }) {
 
 	return (
 		<div className={`${theme}`}>
-			<div className="body flex">
+			<div className="body flex bg-light-bg dark:bg-dark-bg">
 				{/* Navigation side bar */}
-				<div className="w-[103px] bg-[#373B53] flex flex-col justify-between text-light-text-muted ring rounded-tr-3xl rounded-br-3xl h-screen">
+				<div className="w-25.75 bg-light-sidebar z-50 dark:bg-dark-sidebar flex flex-col justify-between text-light-text-muted rounded-tr-3xl rounded-br-3xl h-screen">
 					{/* top section */}
 					<div className="h-[103px] bg-purple-primary rounded-br-3xl rounded-tr-3xl">
 						<div className="h-1/2"></div>
@@ -34,7 +35,13 @@ export default function AppLayout({ children }) {
 				</div>
 
 				{/* main content area */}
-				<main>{children}</main>
+				<main className="flex flex-col items-center min-h-screen w-full">
+					{React.Children.map(children, (child) => (
+						<div className="w-full max-w-[730px] h-screen shrink-0">
+							{child}
+						</div>
+					))}
+				</main>
 			</div>
 		</div>
 	);

@@ -28,7 +28,12 @@
 	--color-purple-light: #9277ff;
 	--color-red-primary: #ec5757;
 	--color-red-light: #ff9797;
-
+	--color-green-primary: #33d69f;
+	--color-orange-primary: #ff8f00;
+	--color-gray-primary: #373b53;
+	--color-gray-light: #f8f8fb;
+	--color-green-light: #d1ffeb;
+	--color-orange-light: #ffdab1;
 	/* Dark Theme Surfaces */
 	--color-dark-bg: #141625;
 	--color-dark-sidebar: #1e2139;
@@ -40,4 +45,18 @@
 	--color-light-text-secondary: #dfe3fa;
 	--color-light-text-muted: #888eb0;
 	--color-light-text-main: #7e88c3;
+	--color-light-sidebar: #494e6e;
+}
+
+.scrollbox::-webkit-scrollbar {
+	width: 6px;
+}
+
+.scrollbox::-webkit-scrollbar-thumb {
+	background: #dfe3fa;
+	border-radius: 999px;
+}
+
+.scrollbox::-webkit-scrollbar-track {
+	background: #f3f4f6;
 }
