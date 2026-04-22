@@ -1,138 +1,72 @@
 import { useState } from "react";
-import StatusFilter from "../components/statusFilter";
-import InvoiceItem from "../components/invoiceItem";
-import noInvoiceImage from "../../../assets/images/noInvoiceImage.png";
+import { useInvoices } from "../../../context/InvoiceContext";
+import StatusFilter from "../components/StatusFilter";
+import InvoiceItem from "../components/InvoiceItem";
 import NewInvoiceForm from "../components/NewInvoiceForm";
+import noInvoiceImage from "../../../assets/images/noInvoiceImage.png";
 
 export default function InvoiceList() {
-	const [show, setShow] = useState(false);
-
+	const { invoices, createInvoice, saveDraft } = useInvoices();
+	const [showNew, setShowNew] = useState(false);
 	const [filters, setFilters] = useState({
 		draft: false,
 		pending: false,
 		paid: false,
 	});
-	console.log(filters);
 
-	//dummy data
-	const invoices = [
-		{
-			id: "RT3082",
-			date: "Due 15 Aug 2021",
-			name: "Elon Musk",
-			amount: "5,120.50",
-			status: "paid",
-		},
+	const activeFilters = Object.keys(filters).filter((k) => filters[k]);
+	const filtered = invoices.filter((inv) =>
+		activeFilters.length === 0 ? true : activeFilters.includes(inv.status),
+	);
 
-		{
-			id: "RT3081",
-			date: "Due 12 Aug 2021",
-			name: "Ada Lovelace",
-			amount: "2,300.00",
-			status: "pending",
-		},
-		{
-			id: "RT3080",
-			date: "Due 10 Aug 2021",
-			name: "Jensen Huang",
-			amount: "1,800.90",
-			status: "draft",
-		},
-		{
-			id: "RT3082",
-			date: "Due 15 Aug 2021",
-			name: "Elon Musk",
-			amount: "5,120.50",
-			status: "paid",
-		},
+	const handleCreate = (form) => {
+		createInvoice(form, "pending");
+		setShowNew(false);
+	};
 
-		{
-			id: "RT3081",
-			date: "Due 12 Aug 2021",
-			name: "Ada Lovelace",
-			amount: "2,300.00",
-			status: "pending",
-		},
-		{
-			id: "RT3080",
-			date: "Due 10 Aug 2021",
-			name: "Jensen Huang",
-			amount: "1,800.90",
-			status: "draft",
-		},
-		{
-			id: "RT3082",
-			date: "Due 15 Aug 2021",
-			name: "Elon Musk",
-			amount: "5,120.50",
-			status: "paid",
-		},
-
-		{
-			id: "RT3081",
-			date: "Due 12 Aug 2021",
-			name: "Ada Lovelace",
-			amount: "2,300.00",
-			status: "pending",
-		},
-		{
-			id: "RT3080",
-			date: "Due 10 Aug 2021",
-			name: "Jensen Huang",
-			amount: "1,800.90",
-			status: "draft",
-		},
-		{
-			id: "RT3080",
-			date: "Due 10 Aug 2021",
-			name: "Jensen Huang",
-			amount: "1,800.90",
-			status: "draft",
-		},
-	];
-
-	const filteredInvoices = invoices.filter((invoice) => {
-		const activeFilters = Object.keys(filters).filter((key) => filters[key]);
-
-		if (activeFilters.length === 0) return true;
-
-		return activeFilters.includes(invoice.status);
-	});
+	const handleDraft = (form) => {
+		saveDraft(form);
+		setShowNew(false);
+	};
 
 	return (
-		<div className=" h-screen  flex items-center flex-col gap-15">
-			{show && <NewInvoiceForm setShow={setShow} show={show} />}
-			{/* invoices top bar */}
-			<div
-				className="mt-[77px] mx-auto w-full max-w-[730px] h-[55px] 
-			 flex justify-between opacity-100"
-			>
-				{/* left section */}
+		<div className="min-h-screen flex flex-col items-center gap-8 px-4 md:px-6 py-8 md:py-12 font-league-spartan">
+			{/* New Invoice Form */}
+			<NewInvoiceForm
+				isOpen={showNew}
+				onClose={() => setShowNew(false)}
+				onSave={handleCreate}
+				onDraft={handleDraft}
+				title="New Invoice"
+				submitLabel="Save & Send"
+			/>
+
+			{/* ── Top bar ── */}
+			<div className="w-full max-w-[730px] flex items-center justify-between">
+				{/* Left */}
 				<div>
-					<h2 className="font-league-spartan font-bold text-4xl dark:text-dark-black">
+					<h1 className="font-bold text-3xl md:text-4xl text-dark-black dark:text-white">
 						Invoices
-					</h2>
-					<p className="font-league-spartan font-medium text-light-text-muted">
-						There are {invoices.length} total invoices
+					</h1>
+					<p className="text-light-text-muted text-sm mt-1">
+						<span className="hidden sm:inline">There are </span>
+						{filtered.length}
+						<span className="hidden sm:inline"> total invoices</span>
+						<span className="sm:hidden"> invoices</span>
 					</p>
 				</div>
 
-				{/* right section */}
-				<div className="flex gap-10 items-center">
-					{/* filter */}
-					<div className="flex items-center">
-						<StatusFilter selected={filters} setSelected={setFilters} />
-					</div>
+				{/* Right */}
+				<div className="flex items-center gap-5 md:gap-10">
+					<StatusFilter selected={filters} setSelected={setFilters} />
 
-					{/* button */}
 					<button
-						onClick={() => setShow(true)}
-						className="flex items-center gap-3 bg-purple-primary hover:bg-purple-light
-					 text-white px-3 py-3 rounded-full shadow transition"
+						onClick={() => setShowNew(true)}
+						className="flex items-center gap-2 md:gap-3 bg-purple-primary hover:bg-purple-light text-white px-3 py-3 md:px-4 rounded-full shadow transition"
 					>
-						<span className="flex items-center justify-center w-6 h-6 bg-white rounded-full">
+						<span className="flex items-center justify-center w-7 h-7 bg-white rounded-full shrink-0">
 							<svg
-								className="w-4 h-4 text-purple-primary"
+								className="w-3 h-3 text-purple-primary"
 								fill="none"
 								stroke="currentColor"
 								strokeWidth="3"
@@ -141,33 +75,49 @@ export default function InvoiceList() {
 								<path d="M12 5v14M5 12h14" />
 							</svg>
 						</span>
-
-						{/* Text */}
-						<span className="text-sm font-medium">New Invoice</span>
+						<span className="text-sm font-bold pr-1 hidden sm:inline">
+							New Invoice
+						</span>
+						<span className="text-sm font-bold pr-1 sm:hidden">New</span>
 					</button>
 				</div>
 			</div>
 
-			{/* Invoices list */}
-			<div className="w-full max-w-[900px] flex flex-col pr-2 gap-4 overflow-y-auto scrollbox">
+			{/* ── Invoice list ── */}
+			<div className="w-full max-w-[730px] flex flex-col gap-4 pb-8">
 				{invoices.length === 0 ? (
-					<div className="flex flex-col items-center justify-center mt-24 gap-6">
-						<img src={noInvoiceImage} alt="No Invoice Displayed" />
-
-						{/* Text */}
+					/* Empty state - no invoices at all */
+					<div className="flex flex-col items-center justify-center mt-16 gap-8">
+						<img
+							src={noInvoiceImage}
+							alt="No invoices"
+							className="w-48 h-48 object-contain"
+						/>
 						<div className="text-center">
-							<h3 className="font-league-spartan font-bold text-2xl dark:text-dark-black mb-3">
+							<h3 className="font-bold text-2xl text-dark-black dark:text-white mb-3">
 								There is nothing here
 							</h3>
-							<p className="font-league-spartan text-light-text-muted text-sm leading-relaxed">
+							<p className="text-light-text-muted text-sm leading-relaxed max-w-[200px] mx-auto">
 								Create an invoice by clicking the{" "}
 								<span className="font-bold">New Invoice</span> button and get
 								started.
 							</p>
 						</div>
 					</div>
+				) : filtered.length === 0 ? (
+					/* Empty state - no results for filter */
+					<div className="flex flex-col items-center justify-center mt-16 gap-6">
+						<div className="text-center">
+							<h3 className="font-bold text-xl text-dark-black dark:text-white mb-2">
+								No results
+							</h3>
+							<p className="text-light-text-muted text-sm">
+								No invoices match the selected filter.
+							</p>
+						</div>
+					</div>
 				) : (
-					filteredInvoices.map((invoice, index) => (
+					filtered.map((invoice, index) => (
 						<InvoiceItem key={`${invoice.id}-${index}`} invoice={invoice} />
 					))
 				)}
