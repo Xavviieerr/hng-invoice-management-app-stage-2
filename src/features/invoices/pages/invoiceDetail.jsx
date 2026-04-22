@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import EditForm from "../components/editForm";
+import DeleteConfirmModal from "../components/DeleteConfirmModal";
 
 export default function InvoiceDetail() {
 	const navigate = useNavigate();
 	const [showEdit, setShowEdit] = useState(false);
+	const [showDelete, setShowDelete] = useState(false);
 
 	const invoice = {
 		id: "RT3082",
@@ -60,9 +62,28 @@ export default function InvoiceDetail() {
 
 	const s = statusStyles[invoice.status];
 
+	const handleDelete = () => {
+		//logic to handle delete goes here
+		alert("deleted");
+	};
+
 	return (
 		<div className="relative min-h-screen bg-light-bg dark:bg-dark-bg font-league-spartan">
 			{/* ── Main detail page ── */}
+
+			{showDelete && (
+				<DeleteConfirmModal
+					isOpen={showDelete}
+					onClose={() => setShowDelete(false)}
+					onConfirm={() => {
+						handleDelete();
+						setShowDelete(false);
+						//call handle delete
+					}}
+					invoiceId="XM9141"
+				/>
+			)}
+
 			<div className="px-6 py-5">
 				{/* ── Edit overlay ── */}
 				{showEdit && <EditForm setShowEdit={setShowEdit} showEdit={showEdit} />}
@@ -106,7 +127,10 @@ export default function InvoiceDetail() {
 							>
 								Edit
 							</button>
-							<button className="px-6 py-3 rounded-full bg-red-primary text-white text-sm font-bold hover:bg-red-light transition">
+							<button
+								onClick={() => setShowDelete(true)}
+								className="px-6 py-3 rounded-full bg-red-primary text-white text-sm font-bold hover:bg-red-light transition"
+							>
 								Delete
 							</button>
 							<button className="px-6 py-3 rounded-full bg-purple-primary text-white text-sm font-bold hover:bg-purple-light transition">
