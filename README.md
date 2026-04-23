@@ -137,7 +137,7 @@ The `InvoiceForm` panel traps focus correctly: on open, the first input receives
 
 ### ARIA
 
-The delete modal has `role="dialog"`, `aria-modal="true"`, and `aria-labelledby` pointing to the modal title's `id`. The form panel has `role="dialog"` and `aria-label`. The filter button has `aria-haspopup="true"` and `aria-expanded` reflecting open state. The backdrop div has `aria-hidden="true"` so screen readers skip it.
+The delete modal has `role="dialog"`, `aria-modal="true"`, and `aria-labelledby` pointing to the modal title's `id`. The form panel has `role="dialog"` and `aria-label`. The filter button has `aria-haspopup="true"` and `aria-expanded` reflecting open state. The backdrop div has `aria-hidden="true"` so screen readers can skip it.
 
 ### Color Contrast
 
