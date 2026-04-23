@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useInvoices } from "../../../context/InvoiceContext";
-import StatusFilter from "../components/StatusFilter";
-import InvoiceItem from "../components/InvoiceItem";
+import StatusFilter from "../components/statusFilter";
+import InvoiceItem from "../components/invoiceItem";
 import NewInvoiceForm from "../components/NewInvoiceForm";
 import noInvoiceImage from "../../../assets/images/noInvoiceImage.png";
 

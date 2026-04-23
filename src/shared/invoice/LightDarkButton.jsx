@@ -1,5 +1,5 @@
 import { useTheme } from "../../context/themeContext";
-import DarkModeIcon from "../../assets/images/darkModeButton.png";
+import DarkModeIcon from "../../assets/images/darkmodeButton.png";
 import LightModeIcon from "../../assets/images/lightModeButton.png";
 
 const LightDarkButton = () => {
