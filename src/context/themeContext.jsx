@@ -1,21 +1,28 @@
-import React, { createContext, useState, useContext } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
-const ThemeContext = createContext();
+const ThemeContext = createContext(null);
 
-export const ThemeProvider = ({ children }) => {
-	const [isDarkMode, setIsDarkMode] = useState(false);
+export function ThemeProvider({ children }) {
+	const [theme, setTheme] = useState(() => {
+		return localStorage.getItem("invoice_theme") || "light";
+	});
 
-	const toggleTheme = () => {
-		setIsDarkMode((prevMode) => !prevMode);
-	};
+	useEffect(() => {
+		localStorage.setItem("invoice_theme", theme);
+	}, [theme]);
 
-	const theme = isDarkMode ? "dark" : "light";
+	const toggleTheme = () =>
+		setTheme((prev) => (prev === "light" ? "dark" : "light"));
 
 	return (
 		<ThemeContext.Provider value={{ theme, toggleTheme }}>
 			{children}
 		</ThemeContext.Provider>
 	);
-};
+}
 
-export const useTheme = () => useContext(ThemeContext);
+export function useTheme() {
+	const ctx = useContext(ThemeContext);
+	if (!ctx) throw new Error("useTheme must be used inside ThemeProvider");
+	return ctx;
+}
